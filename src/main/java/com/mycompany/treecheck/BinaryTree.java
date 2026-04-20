@@ -123,5 +123,52 @@ public class BinaryTree {
         sum += currentNode.getKey();
         
     }
-    
+
+    public ArrayList<Integer> searchPath(int key) {
+        ArrayList<Integer> path = new ArrayList<>();
+        TNode current = startNode;
+
+        while (current != null) {
+            path.add(current.getKey());
+
+            if (key == current.getKey()) {
+                return path;
+            } else if (key < current.getKey()) {
+                current = current.getLeft();
+            } else {
+                current = current.getRight();
+            }
+        }
+
+        return null;
+    }
+
+    public boolean containsSubtree(BinaryTree subTree) {
+        return checkStructure(this.startNode, subTree.startNode);
+    }
+
+    private boolean checkStructure(TNode mainNode, TNode subNode) {
+        if (subNode == null) {
+            return true;
+        }
+        TNode match = findNode(mainNode, subNode.getKey());
+
+        if (match == null) {
+            return false;
+        }
+
+        return checkStructure(match.getLeft(), subNode.getLeft()) &&
+                checkStructure(match.getRight(), subNode.getRight());
+    }
+
+    private TNode findNode(TNode node, int key) {
+        if (node == null || node.getKey() == key) {
+            return node;
+        }
+        if (key < node.getKey()) {
+            return findNode(node.getLeft(), key);
+        }
+        return findNode(node.getRight(), key);
+    }
+
 }
